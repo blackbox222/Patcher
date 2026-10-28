@@ -297,7 +297,7 @@ namespace Util {
 #define PATCHER_LAMBDA_PTR_DEF(convention, name)  \
 template <typename T>          PATCHER_INVOKE(name)  name##LambdaPtr(T) { return &Impl::LambdaInvoker<T>::name;        }
 template <typename T>          PATCHER_INVOKE(Default)     LambdaPtr(T) { return &Impl::LambdaInvoker<T>::Default;     }
-template <Call C, typename T>  PATCHER_INVOKE(Enum<C>::Fn) LambdaPtr(T) { return &Impl::LambdaInvoker<T>::Enum<C>::Fn; }
+template <Call C, typename T>  PATCHER_INVOKE(template Enum<C>::Fn) LambdaPtr(T) { return &Impl::LambdaInvoker<T>::template Enum<C>::Fn; }
 PATCHER_EMIT_CALLING_CONVENTIONS(PATCHER_LAMBDA_PTR_DEF);
 ///@}
 
