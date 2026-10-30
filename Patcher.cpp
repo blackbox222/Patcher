@@ -693,6 +693,7 @@ static constexpr uintptr GetProgramCounter(
 // =====================================================================================================================
 Status PatchContext::LockThreads() {
   g_codeThreadLock.lock();
+  threadsLocked_ = true;
 
   // Create a snapshot of current process threads.
   HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
@@ -752,11 +753,11 @@ Status PatchContext::UnlockThreads() {
     }
   }
 
-  const bool needsUnlock = (frozenThreads_.empty() == false);
   frozenThreads_.clear();
 
-  if (needsUnlock) {
-    const bool ignored = g_codeThreadLock.try_lock();
+  // Release the lock whenever LockThreads() took it, even if it found no other thread to suspend.
+  if (threadsLocked_) {
+    threadsLocked_ = false;
     g_codeThreadLock.unlock();
   }
 

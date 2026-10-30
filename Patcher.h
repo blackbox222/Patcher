@@ -290,6 +290,8 @@ private:
 
   /// Threads locked by LockThreads() (pair of handle, program counter).  AdvanceThreads() may temporarily resume these.
   std::vector<std::pair<uint32, uintptr>>  frozenThreads_;
+  /// Whether this context holds the code thread lock taken by LockThreads().
+  bool                                     threadsLocked_ = false;
 };
 
 // =====================================================================================================================
